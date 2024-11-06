@@ -10,7 +10,7 @@ This package demonstrates a basic ROS2 publisher-subscriber implementation where
 ## Dependencies
 - ROS 2 Humble
 - Ubuntu 22.04
-- C++14 or later
+- C++17
 - CMake 3.8 or later
 - colcon
 - Standard ROS2 development tools (rclcpp, std_msgs)
