@@ -1,86 +1,127 @@
-# ROS2 Simple Publisher-Subscriber Demo
+# ROS2 Publisher-Subscriber Package
 
 ## Overview
-This package demonstrates a basic ROS2 publisher-subscriber implementation where:
-- A publisher node broadcasts string messages with an incrementing counter
-- A subscriber node listens for these messages and displays them
-- Both nodes use ROS2's logging system for output
-- The code follows ROS2 coding standards and includes comprehensive Doxygen documentation
+
+This package implements a basic publisher-subscriber system in ROS2 with added functionality:
+
+    A publisher node that sends customizable string messages at a configurable frequency
+    A subscriber node that receives and validates these messages
+    A service to dynamically modify the publisher's message content
+    Comprehensive error handling and logging throughout
+    Launch file support with configurable publishing frequency
 
 ## Dependencies
-- ROS 2 Humble
-- Ubuntu 22.04
-- C++17
-- CMake 3.8 or later
-- colcon
-- Standard ROS2 development tools (rclcpp, std_msgs)
 
-## Building the Package
+    ROS 2 Humble
+    colcon
+    example_interfaces package
 
-1. Create a ROS2 workspace (if not already created):
-```bash
+## Installation
+1. Create a ROS2 Workspace (if not already created)
+
+```sh
 mkdir -p ~/ros2_ws/src
 cd ~/ros2_ws/src
 ```
 
-2. Clone this package into the src directory
 
-3. Build the package with compile commands generation:
-```bash
-cd ~/ros2_ws
-colcon build --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=1
+2. Clone the Package
+
+```sh
+
+git clone <repository-url> beginner_tutorials
+cd ..
 ```
 
-4. Source the required setup files:
-```bash
-source /opt/ros/humble/setup.bash
-source ~/ros2_ws/install/setup.bash
+3. Build the Package
+
+```sh
+
+colcon build --packages-select beginner_tutorials
+```
+4. Source the Setup Files
+
+```sh
+
+source install/setup.bash
+
+```
+## Usage
+## Running the Nodes Individually
+
+    Start the Publisher Node:
+
+```sh
+
+ros2 run beginner_tutorials talker_2
+
+```
+    Start the Subscriber Node (in a new terminal):
+
+```sh
+
+ros2 run beginner_tutorials listener_2
 ```
 
-## Running the Nodes
 
-1. In terminal 1, run the publisher node:
-```bash
-ros2 run beginner_tutorials talker
+## Using the Launch File
+
+Run both nodes with default frequency (2.0 Hz):
+
+```sh
+ros2 launch beginner_tutorials talker_listener.launch.py
 ```
 
-2. In terminal 2, run the subscriber node:
-```bash
-ros2 run beginner_tutorials listener
+
+Run with custom publishing frequency (e.g., 5.0 Hz):
+
+```sh
+
+ros2 launch beginner_tutorials talker_listener.launch.py frequency:=5.0
 ```
 
-Note: Make sure you've sourced the setup files in each new terminal:
-```bash
-source /opt/ros/humble/setup.bash
-source ~/ros2_ws/install/setup.bash
+
+## Using the Service
+
+Change the message text:
+
+```sh
+
+# To set extended message
+ros2 service call /change_string example_interfaces/srv/SetBool "data: true"
 ```
 
-## Code Structure
-- `publisher_member_function.cpp`: Implements the publisher node
-- `subscriber_member_function.cpp`: Implements the subscriber node
-- Both files include comprehensive Doxygen documentation and follow ROS2 coding standards
+```sh
+# To reset to default message
+ros2 service call /change_string example_interfaces/srv/SetBool "data: false"
+```
 
-## Additional Features
-- Doxygen documentation for all major components
-- Proper ROS2 logging implementation
-- Standard ROS2 message types (std_msgs/String)
-- Apache 2.0 license compliance
+## Features
+## Publisher Node
+
+    Configurable publishing frequency via parameter
+    Dynamic message modification through service
+    Error handling for invalid frequency values
+    Message counter with high count warnings
+    Comprehensive logging at multiple levels
+
+## Subscriber Node
+
+    Message validation (empty message checks)
+    Length validation (warns for messages > 256 characters)
+    Error handling for message processing
+    Detailed logging of received messages
+
+## Error Handling
+
+The package includes comprehensive error handling:
+
+    Validation of publishing frequency
+    Service request validation
+    Message content validation
+    Exception handling for node initialization
+    Logging at DEBUG, INFO, WARN, ERROR, and FATAL levels
 
 ## License
-This package is licensed under the Apache License 2.0.
 
-## Author
-Navdeep Singh
-
-## Additional Notes
-- The publisher publishes messages every 500ms by default
-- The subscriber uses ROS2's logging system to display received messages
-- Both nodes can be terminated using Ctrl+C
-- The code includes proper error handling and shutdown procedures
-
-For any issues or questions, please refer to the ROS2 documentation or open an issue in the repository.
-
-
-The main changes made:
-- Changed `cpp_pubsub` to `beginner_tutorials` in the ros2 run commands
-- All other content remains the same as it was package-name independent
+This project is licensed under the Apache License 2.0 - see the file headers for details.
