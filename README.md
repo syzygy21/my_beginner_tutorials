@@ -4,17 +4,17 @@
 
 This package implements a basic publisher-subscriber system in ROS2 with added functionality:
 
-    A publisher node that sends customizable string messages at a configurable frequency
-    A subscriber node that receives and validates these messages
-    A service to dynamically modify the publisher's message content
-    Comprehensive error handling and logging throughout
-    Launch file support with configurable publishing frequency
+A publisher node that sends customizable string messages at a configurable frequency
+A subscriber node that receives and validates these messages
+A service to dynamically modify the publisher's message content
+Comprehensive error handling and logging throughout
+Launch file support with configurable publishing frequency
 
 ## Dependencies
 
-    ROS 2 Humble
-    colcon
-    example_interfaces package
+ROS 2 Humble
+colcon
+example_interfaces package
 
 ## Installation
 1. Create a ROS2 Workspace (if not already created)
