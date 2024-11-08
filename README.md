@@ -99,28 +99,28 @@ ros2 service call /change_string example_interfaces/srv/SetBool "data: false"
 ## Features
 ## Publisher Node
 
-    Configurable publishing frequency via parameter
-    Dynamic message modification through service
-    Error handling for invalid frequency values
-    Message counter with high count warnings
-    Comprehensive logging at multiple levels
+Configurable publishing frequency via parameter
+Dynamic message modification through service
+Error handling for invalid frequency values
+Message counter with high count warnings
+Comprehensive logging at multiple levels
 
 ## Subscriber Node
 
-    Message validation (empty message checks)
-    Length validation (warns for messages > 256 characters)
-    Error handling for message processing
-    Detailed logging of received messages
+Message validation (empty message checks)
+Length validation (warns for messages > 256 characters)
+Error handling for message processing
+Detailed logging of received messages
 
 ## Error Handling
 
 The package includes comprehensive error handling:
 
-    Validation of publishing frequency
-    Service request validation
-    Message content validation
-    Exception handling for node initialization
-    Logging at DEBUG, INFO, WARN, ERROR, and FATAL levels
+Validation of publishing frequency
+Service request validation
+Message content validation
+Exception handling for node initialization
+Logging at DEBUG, INFO, WARN, ERROR, and FATAL levels
 
 ## License
 
