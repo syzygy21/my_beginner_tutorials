@@ -49,14 +49,14 @@ source install/setup.bash
 ## Usage
 ## Running the Nodes Individually
 
-    Start the Publisher Node:
+Start the Publisher Node:
 
 ```sh
 
 ros2 run beginner_tutorials talker_2
 
 ```
-    Start the Subscriber Node (in a new terminal):
+Start the Subscriber Node (in a new terminal):
 
 ```sh
 
