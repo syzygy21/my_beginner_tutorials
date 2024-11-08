@@ -1,3 +1,0 @@
-navdeep@navdeep-Zephyrus-G15-GA503RM-GA503RM:~/ros_projects/src/my_beginner_tutorials/beginner_tutorials/src$ cpplint --filter=-build/c++11,+build/c++17,-build/namespaces,-build/include_order publisher_member_function.cpp subscriber_member_function.cpp 
-Done processing publisher_member_function.cpp
-Done processing subscriber_member_function.cpp

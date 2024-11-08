@@ -16,24 +16,49 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(example_interfaces REQUIRED)
 
+add_executable(talker_2 src/publisher_member_function_2.cpp)
+ament_target_dependencies(talker_2 rclcpp std_msgs example_interfaces)  # Add this line)
 
-add_executable(talker src/publisher_member_function.cpp)
-ament_target_dependencies(talker rclcpp std_msgs)  # Add this line)
-
-add_executable(listener src/subscriber_member_function.cpp)
-ament_target_dependencies(listener rclcpp std_msgs)
+add_executable(listener_2 src/subscriber_member_function_2.cpp)
+ament_target_dependencies(listener_2 rclcpp std_msgs)
 
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
 
+include_directories(
+  include
+  ${rclcpp_INCLUDE_DIRS}
+  ${std_msgs_INCLUDE_DIRS}
+  ${std_srvs_INCLUDE_DIRS}
+)
+
 install(TARGETS
-  talker
-  listener
+  talker_2
+  listener_2
   DESTINATION lib/${PROJECT_NAME})
 
+install(DIRECTORY
+  launch
+  DESTINATION share/${PROJECT_NAME}
+)
 
+target_include_directories(talker_2 PRIVATE
+  ${CMAKE_CURRENT_BINARY_DIR}/include
+)
+
+target_include_directories(listener_2 PRIVATE
+  ${CMAKE_CURRENT_BINARY_DIR}/include
+)
+
+
+# Ensure the generated headers are available
+install(
+  DIRECTORY include/
+  DESTINATION include/
+)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -46,5 +71,7 @@ if(BUILD_TESTING)
   set(ament_cmake_cpplint_FOUND TRUE)
   ament_lint_auto_find_test_dependencies()
 endif()
+
+
 
 ament_package()
