@@ -17,9 +17,14 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(example_interfaces REQUIRED)
+find_package(tf2_ros REQUIRED)
+find_package(geometry_msgs REQUIRED)
+
+
+
 
 add_executable(talker_2 src/publisher_member_function_2.cpp)
-ament_target_dependencies(talker_2 rclcpp std_msgs example_interfaces)  # Add this line)
+ament_target_dependencies(talker_2 rclcpp std_msgs example_interfaces tf2_ros tf2 geometry_msgs)  # Add this line)
 
 add_executable(listener_2 src/subscriber_member_function_2.cpp)
 ament_target_dependencies(listener_2 rclcpp std_msgs)

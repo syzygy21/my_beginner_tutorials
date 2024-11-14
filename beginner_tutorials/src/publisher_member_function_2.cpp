@@ -25,6 +25,7 @@ using namespace std::chrono_literals;
 MinimalPublisher::MinimalPublisher()
     : Node("minimal_publisher"), count_(0), message_text_("I am Navdeep") {
   // Declare and validate the publishing frequency parameter
+  tf_broadcaster_ = std::make_shared<tf2_ros::TransformBroadcaster>(this);
   this->declare_parameter("publish_frequency", 2.0);
   double freq = this->get_parameter("publish_frequency").as_double();
 
@@ -90,6 +91,28 @@ void MinimalPublisher::timer_callback() {
 
   RCLCPP_INFO(this->get_logger(), "Publishing: '%s'", message.data.c_str());
   publisher_->publish(message);
+
+  // Broadcasting the transform
+  geometry_msgs::msg::TransformStamped transform;
+  transform.header.stamp = this->get_clock()->now();
+  transform.header.frame_id = "world";
+  transform.child_frame_id = "talk";
+
+  // Define translation
+  transform.transform.translation.x = 1.0;
+  transform.transform.translation.y = 2.0;
+  transform.transform.translation.z = 0.5;
+
+  // Define rotation using a quaternion
+  tf2::Quaternion q;
+  q.setRPY(0.0, 0.0, count_ * 0.1); // Rotation around Z-axis
+  transform.transform.rotation.x = q.x();
+  transform.transform.rotation.y = q.y();
+  transform.transform.rotation.z = q.z();
+  transform.transform.rotation.w = q.w();
+
+  tf_broadcaster_->sendTransform(transform);
+
 }
 
 /**
