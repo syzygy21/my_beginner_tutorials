@@ -14,15 +14,15 @@ using std::placeholders::_1;
 
 /**
  * @brief Constructs a new MinimalSubscriber object
- * 
+ *
  * @details Initializes the node with the following components:
  *   - Creates a subscription to the 'topic' topic
  *   - Sets up message callback handling
  *   - Configures logging for node operations
- * 
+ *
  * @param None
  * @throws std::runtime_error If subscription creation fails
- * 
+ *
  * @note Uses a queue size of 10 for message buffering
  */
 MinimalSubscriber::MinimalSubscriber() : Node("minimal_subscriber") {
@@ -47,17 +47,17 @@ MinimalSubscriber::MinimalSubscriber() : Node("minimal_subscriber") {
 
 /**
  * @brief Callback function for processing received messages
- * 
+ *
  * @param[in] msg The received string message to process
- * 
+ *
  * @details Performs the following validations and operations:
  *   - Checks for empty messages
  *   - Validates message length (warns if > 256 characters)
  *   - Processes and logs the received message content
- * 
+ *
  * @warning Logs warnings for empty messages and unusually long messages
  * @throws std::runtime_error If message processing fails
- * 
+ *
  * @note All logging is performed with appropriate severity levels
  */
 void MinimalSubscriber::topic_callback(const std_msgs::msg::String& msg) const {
@@ -75,7 +75,7 @@ void MinimalSubscriber::topic_callback(const std_msgs::msg::String& msg) const {
     // WARN - Log unusually long message
     RCLCPP_WARN_STREAM(this->get_logger(),
                        "Received unusually long message: " << msg.data.length()
-                           << " characters");
+                                                           << " characters");
   }
   try {
     // INFO - Log received message
@@ -89,13 +89,13 @@ void MinimalSubscriber::topic_callback(const std_msgs::msg::String& msg) const {
 
 /**
  * @brief Main function to initialize and run the subscriber node
- * 
+ *
  * @param argc Number of command line arguments
  * @param argv Array of command line arguments
  * @return int Exit status
  *   @retval 0 Successful execution
  *   @retval 1 Error occurred during execution
- * 
+ *
  * @details Performs the following operations:
  *   - Initializes the ROS2 system
  *   - Creates and spins the subscriber node

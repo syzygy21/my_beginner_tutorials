@@ -1,2 +1,0 @@
-navdeep@navdeep-Zephyrus-G15-GA503RM-GA503RM:~/ros_projects$ clang-tidy -p build  $(find . -name '*.cpp')
-navdeep@navdeep-Zephyrus-G15-GA503RM-GA503RM:~/ros_projects$ 

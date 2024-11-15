@@ -1,6 +1,7 @@
 /**
  * @file minimal_publisher.cpp
- * @brief Implementation of a ROS2 publisher node with dynamic message modification
+ * @brief Implementation of a ROS2 publisher node with dynamic message
+ * modification
  * @author Navdeep
  * @copyright 2024
  * @details This file implements a ROS2 publisher node that:
@@ -14,17 +15,18 @@ using namespace std::chrono_literals;
 
 /**
  * @brief Constructs a new MinimalPublisher object
- * 
+ *
  * @details Initializes the node with the following components:
  *   - A publisher for string messages
  *   - A transform broadcaster
  *   - A timer for periodic publishing
  *   - A service for modifying message content
- * 
+ *
  * @param None
  * @throws std::runtime_error If publisher creation fails
- * 
- * @note Default publishing frequency is 2.0 Hz and can be configured via ROS parameter
+ *
+ * @note Default publishing frequency is 2.0 Hz and can be configured via ROS
+ * parameter
  */
 MinimalPublisher::MinimalPublisher()
     : Node("minimal_publisher"), count_(0), message_text_("I am Navdeep") {
@@ -78,14 +80,14 @@ MinimalPublisher::MinimalPublisher()
 
 /**
  * @brief Timer callback function for publishing messages and transforms
- * 
+ *
  * @details This callback:
  *   - Publishes the current message text with an incrementing counter
  *   - Broadcasts a transform from 'world' to 'talk' frame
  *   - Updates transform with rotation around Z-axis based on counter
- * 
+ *
  * @warning Logs a warning when message count exceeds 10
- * 
+ *
  * @note Transform parameters:
  *   - Translation: (1.0, 2.0, 0.5)
  *   - Rotation: Varies with counter (around Z-axis)
@@ -128,18 +130,19 @@ void MinimalPublisher::timer_callback() {
 
 /**
  * @brief Service callback to modify the published message text
- * 
+ *
  * @param[in] request Shared pointer to SetBool request
  *                    - true: Sets extended introduction
  *                    - false: Resets to default message
  * @param[out] response Shared pointer to SetBool response containing:
  *                     - success: Operation status
  *                     - message: Status description
- * 
- * @details Changes the message text between two preset strings based on the request:
+ *
+ * @details Changes the message text between two preset strings based on the
+ * request:
  *   - Default: "I am Navdeep"
  *   - Extended: "My name is Navdeep and I am a robotics student"
- * 
+ *
  * @note Logs error if null request is received
  */
 void MinimalPublisher::change_string_callback(
@@ -168,11 +171,11 @@ void MinimalPublisher::change_string_callback(
 
 /**
  * @brief Main function to initialize and run the publisher node
- * 
+ *
  * @param argc Number of command line arguments
  * @param argv Array of command line arguments
  * @return int Exit status (0 for normal exit, non-zero for errors)
- * 
+ *
  * @note Initializes ROS2, spins the node, and performs cleanup on shutdown
  */
 int main(int argc, char* argv[]) {
