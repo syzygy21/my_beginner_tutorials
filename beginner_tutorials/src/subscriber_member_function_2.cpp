@@ -1,12 +1,12 @@
 /**
  * @file minimal_subscriber.cpp
- * @brief Implementation of the MinimalSubscriber class that subscribes to
- * string messages
+ * @brief Implementation of a ROS2 subscriber node for string messages
  * @author Navdeep
  * @copyright 2024
- *
- * This file implements a ROS2 subscriber node that listens for string messages.
- * It includes comprehensive error handling and message validation.
+ * @details This file implements a ROS2 subscriber node that:
+ *   - Listens for string messages on the 'topic' topic
+ *   - Performs message validation and error handling
+ *   - Provides comprehensive logging at various severity levels
  */
 
 #include "beginner_tutorials/minimal_subscriber.hpp"
@@ -14,21 +14,24 @@ using std::placeholders::_1;
 
 /**
  * @brief Constructs a new MinimalSubscriber object
- *
- * Initializes the subscriber node and sets up the subscription to the 'topic'
- * topic. Includes error handling and logging for initialization failures.
- *
+ * 
+ * @details Initializes the node with the following components:
+ *   - Creates a subscription to the 'topic' topic
+ *   - Sets up message callback handling
+ *   - Configures logging for node operations
+ * 
+ * @param None
  * @throws std::runtime_error If subscription creation fails
+ * 
+ * @note Uses a queue size of 10 for message buffering
  */
 MinimalSubscriber::MinimalSubscriber() : Node("minimal_subscriber") {
   // DEBUG - Log initialization details
   RCLCPP_DEBUG_STREAM(this->get_logger(),
                       "Initializing subscriber node on topic 'topic'");
-
   try {
     subscription_ = this->create_subscription<std_msgs::msg::String>(
         "topic", 10, std::bind(&MinimalSubscriber::topic_callback, this, _1));
-
     // INFO - Log successful initialization
     RCLCPP_INFO_STREAM(
         this->get_logger(),
@@ -43,36 +46,37 @@ MinimalSubscriber::MinimalSubscriber() : Node("minimal_subscriber") {
 }
 
 /**
- * @brief Callback function that processes received messages
- *
- * Processes incoming string messages with various validation checks:
- * - Checks for empty messages
- * - Validates message length
- * - Handles message processing errors
- *
- * @param msg The received string message
+ * @brief Callback function for processing received messages
+ * 
+ * @param[in] msg The received string message to process
+ * 
+ * @details Performs the following validations and operations:
+ *   - Checks for empty messages
+ *   - Validates message length (warns if > 256 characters)
+ *   - Processes and logs the received message content
+ * 
+ * @warning Logs warnings for empty messages and unusually long messages
  * @throws std::runtime_error If message processing fails
+ * 
+ * @note All logging is performed with appropriate severity levels
  */
 void MinimalSubscriber::topic_callback(const std_msgs::msg::String& msg) const {
   // DEBUG - Log detailed message info
   RCLCPP_DEBUG_STREAM(this->get_logger(),
                       "Received message of length: " << msg.data.length());
-
   // Validate message content
   if (msg.data.empty()) {
     // WARN - Log empty message warning
     RCLCPP_WARN_STREAM(this->get_logger(), "Received empty message");
     return;
   }
-
   // Check message length
   if (msg.data.length() > 256) {
     // WARN - Log unusually long message
     RCLCPP_WARN_STREAM(this->get_logger(),
                        "Received unusually long message: " << msg.data.length()
-                                                           << " characters");
+                           << " characters");
   }
-
   try {
     // INFO - Log received message
     RCLCPP_INFO_STREAM(this->get_logger(), "I heard: " << msg.data);
@@ -84,14 +88,19 @@ void MinimalSubscriber::topic_callback(const std_msgs::msg::String& msg) const {
 }
 
 /**
- * @brief Main function to run the subscriber node
- *
- * Initializes ROS2, creates and spins the subscriber node, and handles any
- * runtime errors.
- *
+ * @brief Main function to initialize and run the subscriber node
+ * 
  * @param argc Number of command line arguments
- * @param argv Command line arguments
- * @return int 0 on successful execution, 1 on error
+ * @param argv Array of command line arguments
+ * @return int Exit status
+ *   @retval 0 Successful execution
+ *   @retval 1 Error occurred during execution
+ * 
+ * @details Performs the following operations:
+ *   - Initializes the ROS2 system
+ *   - Creates and spins the subscriber node
+ *   - Handles runtime errors with appropriate logging
+ *   - Performs cleanup on shutdown
  */
 int main(int argc, char* argv[]) {
   try {

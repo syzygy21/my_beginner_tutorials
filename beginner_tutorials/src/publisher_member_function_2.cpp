@@ -1,13 +1,12 @@
 /**
  * @file minimal_publisher.cpp
- * @brief Implementation of the MinimalPublisher class that publishes
- * customizable string messages
+ * @brief Implementation of a ROS2 publisher node with dynamic message modification
  * @author Navdeep
  * @copyright 2024
- *
- * This file implements a ROS2 publisher node that publishes string messages at
- * a configurable frequency. It also provides a service to modify the message
- * content dynamically.
+ * @details This file implements a ROS2 publisher node that:
+ *   - Publishes customizable string messages at a configurable frequency
+ *   - Broadcasts transforms between 'world' and 'talk' frames
+ *   - Provides a service to modify message content dynamically
  */
 
 #include "beginner_tutorials/minimal_publisher.hpp"
@@ -15,12 +14,17 @@ using namespace std::chrono_literals;
 
 /**
  * @brief Constructs a new MinimalPublisher object
- *
- * Initializes the publisher with configurable frequency and sets up the service
- * for changing message content. Includes comprehensive error checking and
- * logging.
- *
+ * 
+ * @details Initializes the node with the following components:
+ *   - A publisher for string messages
+ *   - A transform broadcaster
+ *   - A timer for periodic publishing
+ *   - A service for modifying message content
+ * 
+ * @param None
  * @throws std::runtime_error If publisher creation fails
+ * 
+ * @note Default publishing frequency is 2.0 Hz and can be configured via ROS parameter
  */
 MinimalPublisher::MinimalPublisher()
     : Node("minimal_publisher"), count_(0), message_text_("I am Navdeep") {
@@ -73,10 +77,18 @@ MinimalPublisher::MinimalPublisher()
 }
 
 /**
- * @brief Timer callback function for publishing messages
- *
- * Publishes the current message text along with an incrementing counter.
- * Includes warning for high message counts.
+ * @brief Timer callback function for publishing messages and transforms
+ * 
+ * @details This callback:
+ *   - Publishes the current message text with an incrementing counter
+ *   - Broadcasts a transform from 'world' to 'talk' frame
+ *   - Updates transform with rotation around Z-axis based on counter
+ * 
+ * @warning Logs a warning when message count exceeds 10
+ * 
+ * @note Transform parameters:
+ *   - Translation: (1.0, 2.0, 0.5)
+ *   - Rotation: Varies with counter (around Z-axis)
  */
 void MinimalPublisher::timer_callback() {
   auto message = std_msgs::msg::String();
@@ -105,26 +117,30 @@ void MinimalPublisher::timer_callback() {
 
   // Define rotation using a quaternion
   tf2::Quaternion q;
-  q.setRPY(0.0, 0.0, count_ * 0.1); // Rotation around Z-axis
+  q.setRPY(0.0, 0.0, count_ * 0.1);  // Rotation around Z-axis
   transform.transform.rotation.x = q.x();
   transform.transform.rotation.y = q.y();
   transform.transform.rotation.z = q.z();
   transform.transform.rotation.w = q.w();
 
   tf_broadcaster_->sendTransform(transform);
-
 }
 
 /**
- * @brief Service callback to change the message text
- *
- * @param request Boolean request to change the message (true) or reset to
- * default (false)
- * @param response Contains success status and confirmation message
- *
- * Changes the message text based on the request value:
- * - true: Sets to extended introduction
- * - false: Resets to default message
+ * @brief Service callback to modify the published message text
+ * 
+ * @param[in] request Shared pointer to SetBool request
+ *                    - true: Sets extended introduction
+ *                    - false: Resets to default message
+ * @param[out] response Shared pointer to SetBool response containing:
+ *                     - success: Operation status
+ *                     - message: Status description
+ * 
+ * @details Changes the message text between two preset strings based on the request:
+ *   - Default: "I am Navdeep"
+ *   - Extended: "My name is Navdeep and I am a robotics student"
+ * 
+ * @note Logs error if null request is received
  */
 void MinimalPublisher::change_string_callback(
     const std::shared_ptr<example_interfaces::srv::SetBool::Request> request,
@@ -151,11 +167,13 @@ void MinimalPublisher::change_string_callback(
 }
 
 /**
- * @brief Main function to run the publisher node
- *
+ * @brief Main function to initialize and run the publisher node
+ * 
  * @param argc Number of command line arguments
- * @param argv Command line arguments
- * @return int 0 on successful execution, non-zero on error
+ * @param argv Array of command line arguments
+ * @return int Exit status (0 for normal exit, non-zero for errors)
+ * 
+ * @note Initializes ROS2, spins the node, and performs cleanup on shutdown
  */
 int main(int argc, char* argv[]) {
   rclcpp::init(argc, argv);
