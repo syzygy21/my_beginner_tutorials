@@ -1,0 +1,24 @@
+launch:
+- catch2_launch_file:
+    description: "Integration test for MinimalPublisher functionality"
+
+- arg:
+    name: "test_duration"
+    default: "10.0"
+    description: "Duration for test execution in seconds"
+
+- node:
+    pkg: "beginner_tutorials"
+    exec: "talker_2"  # Changed from talker to talker_2 to match your executable
+    name: "minimal_publisher"
+    output: "screen"
+    param:
+    - name: "publish_frequency"
+      value: 2.0
+
+- catch2_integration_test_node:
+    pkg: "beginner_tutorials"
+    exec: "integration_test_node"
+    param:
+    - name: "test_duration"
+      value: "$(var test_duration)"

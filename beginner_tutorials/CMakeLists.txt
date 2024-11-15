@@ -17,13 +17,31 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(example_interfaces REQUIRED)
+find_package(tf2_ros REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(catch_ros2 REQUIRED)
+find_package(std_srvs REQUIRED)
+
+
 
 add_executable(talker_2 src/publisher_member_function_2.cpp)
-ament_target_dependencies(talker_2 rclcpp std_msgs example_interfaces)  # Add this line)
+ament_target_dependencies(talker_2 rclcpp std_msgs example_interfaces tf2_ros tf2 geometry_msgs)  # Add this line)
 
 add_executable(listener_2 src/subscriber_member_function_2.cpp)
 ament_target_dependencies(listener_2 rclcpp std_msgs)
 
+add_executable(integration_test_node
+  src/integration_test_node.cpp
+  )
+# The link libraries call this node with "catch_ros2::catch_ros2_with_node_main"
+# to get the default integration test node main function
+target_link_libraries(integration_test_node
+  catch_ros2::catch_ros2_with_node_main
+  )
+  
+ament_target_dependencies(integration_test_node
+  rclcpp std_msgs std_srvs tf2 tf2_ros geometry_msgs
+  )
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
@@ -36,6 +54,7 @@ include_directories(
 )
 
 install(TARGETS
+  integration_test_node
   talker_2
   listener_2
   DESTINATION lib/${PROJECT_NAME})
@@ -61,17 +80,16 @@ install(
 )
 
 if(BUILD_TESTING)
-  find_package(ament_lint_auto REQUIRED)
-  # the following line skips the linter which checks for copyrights
-  # comment the line when a copyright and license is added to all source files
-  set(ament_cmake_copyright_FOUND TRUE)
-  # the following line skips cpplint (only works in a git repo)
-  # comment the line when this package is in a git repo and when
-  # a copyright and license is added to all source files
   set(ament_cmake_cpplint_FOUND TRUE)
-  ament_lint_auto_find_test_dependencies()
+  set(ament_cmake_lint_cmake_FOUND TRUE)
+  set(ament_cmake_copyright_FOUND TRUE)
+  set(ament_cmake_cpplint_FOUND TRUE)
+  set(ament_cmake_flake8_FOUND TRUE)
+  set(ament_cmake_uncrustify_FOUND TRUE)
 endif()
 
-
+catch_ros2_add_integration_test (ExampleIntegration_TestYAML
+  LAUNCH_FILE integration_test.launch.yaml  # example in YAML
+  )
 
 ament_package()

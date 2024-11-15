@@ -1,0 +1,4 @@
+navdeep@navdeep-Zephyrus-G15-GA503RM-GA503RM:~/ros_projects$ cpplint --filter=-build/c++11,+build/c++17,-build/namespaces,-build/include_order $( find . -name *.cpp | grep -vE -e "^./build/" )
+Done processing ./src/my_beginner_tutorials/beginner_tutorials/src/integration_test_node.cpp
+Done processing ./src/my_beginner_tutorials/beginner_tutorials/src/publisher_member_function_2.cpp
+Done processing ./src/my_beginner_tutorials/beginner_tutorials/src/subscriber_member_function_2.cpp

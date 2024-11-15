@@ -1,0 +1,2 @@
+navdeep@navdeep-Zephyrus-G15-GA503RM-GA503RM:~/ros_projects$ clang-tidy -p build $( find src -name *.cpp | grep -v "/build/" )
+navdeep@navdeep-Zephyrus-G15-GA503RM-GA503RM:~/ros_projects$
